@@ -1,0 +1,364 @@
+{% extends 'base.html' %}
+
+{% block title %}HR-Tech Innovation Suite | Employee Sentiment Analysis{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/sentiment_analysis.js') }}"></script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="display-5 fw-bold mb-3">Employee Sentiment Analysis</h1>
+      <p class="lead">Analyze employee feedback to assess sentiment, identify key themes, and predict attrition risks.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Input Form -->
+    <div class="col-lg-5 mb-4">
+      <div class="card dashboard-card">
+        <div class="card-header dashboard-card-header">
+          <h4 class="card-title mb-0"><i class="fas fa-comment-alt me-2"></i>Analyze Feedback</h4>
+        </div>
+        <div class="card-body">
+          <form id="sentiment-form" action="/analyze-sentiment" method="post">
+            <div class="mb-4">
+              <label for="feedback-text" class="form-label">Employee Feedback</label>
+              <textarea class="form-control" id="feedback-text" name="feedback_text" rows="10" placeholder="Paste employee feedback, survey responses, or exit interview comments here..." required></textarea>
+              <div class="form-text">For best results, include detailed responses from employees about their work experience.</div>
+            </div>
+            
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search me-2"></i>Analyze Sentiment
+              </button>
+              <button type="button" id="reset-form" class="btn btn-outline-secondary">
+                <i class="fas fa-undo me-2"></i>Reset
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Example Feedback Card -->
+      <div class="card dashboard-card mt-4">
+        <div class="card-header dashboard-card-header">
+          <h5 class="card-title mb-0"><i class="fas fa-lightbulb me-2"></i>Example Feedback</h5>
+        </div>
+        <div class="card-body">
+          <p class="small mb-2">You can use these sample feedbacks to test the system:</p>
+          <div class="bg-light p-3 rounded small" style="max-height: 200px; overflow-y: auto;">
+            <p><strong>Positive Example:</strong></p>
+            <p>"I've been working at this company for three years now, and I'm very satisfied with my role. The team culture is supportive, and I appreciate the flexibility to work remotely when needed. My manager provides clear guidance and recognizes my contributions regularly. The company's benefits package is excellent, and I feel there are good opportunities for growth. I see myself staying here long-term and continuing to develop my career."</p>
+            
+            <p><strong>Negative Example:</strong></p>
+            <p>"I've been with the company for about 8 months now, and I'm already looking for other opportunities. The workload is overwhelming, and we're constantly understaffed. My manager rarely provides feedback or support, and I feel like my skills aren't being utilized effectively. The compensation is below market rate, and there seems to be little opportunity for advancement. Team morale is low, and several of my colleagues have already left for other companies. I don't see a future for myself here if things don't change dramatically."</p>
+            
+            <p><strong>Mixed Example:</strong></p>
+            <p>"There are aspects of my job that I really enjoy, such as the challenging projects and the talented colleagues I work with. The company's mission aligns with my values, and I believe in what we're trying to achieve. However, I'm concerned about the recent reorganization and lack of clear communication from leadership. The work-life balance has deteriorated over the past few months, and I'm starting to feel burned out. I would like to stay, but I need to see improvements in how the company manages workload and communicates changes."</p>
+          </div>
+          <div class="d-flex gap-2 mt-2">
+            <button class="btn btn-sm btn-outline-success" onclick="document.getElementById('feedback-text').value = document.querySelectorAll('.bg-light p')[1].innerText; document.getElementById('feedback-text').focus();">
+              <i class="fas fa-smile me-1"></i>Positive Example
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="document.getElementById('feedback-text').value = document.querySelectorAll('.bg-light p')[3].innerText; document.getElementById('feedback-text').focus();">
+              <i class="fas fa-frown me-1"></i>Negative Example
+            </button>
+            <button class="btn btn-sm btn-outline-warning" onclick="document.getElementById('feedback-text').value = document.querySelectorAll('.bg-light p')[5].innerText; document.getElementById('feedback-text').focus();">
+              <i class="fas fa-meh me-1"></i>Mixed Example
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Results Display -->
+    <div class="col-lg-7">
+      <div id="result-section" class="result-section {% if not session.get('sentiment_analysis') %}d-none{% endif %}">
+        <h3 class="mb-4"><i class="fas fa-chart-line me-2"></i>Sentiment Analysis Results</h3>
+        
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title text-center mb-3">Sentiment Overview</h5>
+                <div class="text-center mb-3">
+                  <span id="sentiment-label" class="badge bg-secondary">
+                    {% if session.get('sentiment_analysis') %}
+                      {{ session.get('sentiment_analysis').primary_sentiment }}
+                    {% else %}
+                      Unknown
+                    {% endif %}
+                  </span>
+                </div>
+                <div class="sentiment-indicator">
+                  <div id="sentiment-marker" class="sentiment-marker" style="left: 
+                    {% if session.get('sentiment_analysis') %}
+                      {{ ((session.get('sentiment_analysis').sentiment_score + 1) / 2) * 100 }}%
+                    {% else %}
+                      50%
+                    {% endif %}
+                  "></div>
+                </div>
+                <div class="d-flex justify-content-between small">
+                  <span>Negative</span>
+                  <span>Neutral</span>
+                  <span>Positive</span>
+                </div>
+                <div class="text-center mt-3">
+                  <p class="mb-0">Sentiment Score: <strong id="sentiment-score">
+                    {% if session.get('sentiment_analysis') %}
+                      {{ "%.2f"|format(session.get('sentiment_analysis').sentiment_score) }}
+                    {% else %}
+                      0.00
+                    {% endif %}
+                  </strong></p>
+                  <p class="small text-muted">(-1.0 to 1.0 scale)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title text-center mb-3">Attrition Risk</h5>
+                <div class="text-center mb-2">
+                  <span id="attrition-risk" class="badge 
+                    {% if session.get('sentiment_analysis') and session.get('sentiment_analysis').attrition_risk %}
+                      {% if session.get('sentiment_analysis').attrition_risk.level|lower == 'high' %}
+                        bg-danger
+                      {% elif session.get('sentiment_analysis').attrition_risk.level|lower == 'medium' %}
+                        bg-warning
+                      {% elif session.get('sentiment_analysis').attrition_risk.level|lower == 'low' %}
+                        bg-success
+                      {% else %}
+                        bg-secondary
+                      {% endif %}
+                    {% else %}
+                      bg-secondary
+                    {% endif %}">
+                    {% if session.get('sentiment_analysis') and session.get('sentiment_analysis').attrition_risk %}
+                      {{ session.get('sentiment_analysis').attrition_risk.level|capitalize }}
+                    {% else %}
+                      Unknown
+                    {% endif %}
+                  </span>
+                </div>
+                <div class="text-center mb-3" style="height: 100px;">
+                  <canvas id="attrition-gauge" width="200" height="100"></canvas>
+                </div>
+                <p class="small" id="attrition-reasoning">
+                  {% if session.get('sentiment_analysis') and session.get('sentiment_analysis').attrition_risk %}
+                    {{ session.get('sentiment_analysis').attrition_risk.reasoning }}
+                  {% else %}
+                    No reasoning provided
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card mb-4">
+          <div class="card-header dashboard-card-header">
+            <h5 class="card-title mb-0"><i class="fas fa-tags me-2"></i>Key Themes</h5>
+          </div>
+          <div class="card-body">
+            <div id="key-themes">
+              {% if session.get('sentiment_analysis') and session.get('sentiment_analysis').key_themes %}
+                {% for theme in session.get('sentiment_analysis').key_themes %}
+                  <span class="badge bg-primary me-2 mb-2">{{ theme }}</span>
+                {% endfor %}
+              {% else %}
+                <p class="text-muted">No key themes identified</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mb-4">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header dashboard-card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-chart-bar me-2"></i>Sentiment Distribution</h5>
+              </div>
+              <div class="card-body">
+                <div style="height: 250px;">
+                  <canvas id="sentiment-chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <div class="card h-100">
+              <div class="card-header dashboard-card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-thumbs-up me-2"></i>Positive Aspects</h5>
+              </div>
+              <div class="card-body p-0">
+                <ul class="list-group list-group-flush" id="positive-aspects">
+                  {% if session.get('sentiment_analysis') and session.get('sentiment_analysis').positive_aspects %}
+                    {% for item in session.get('sentiment_analysis').positive_aspects %}
+                      <li class="list-group-item">
+                        <i class="fas fa-check-circle text-success me-2"></i>{{ item }}
+                      </li>
+                    {% endfor %}
+                  {% else %}
+                    <li class="list-group-item text-muted">No positive aspects identified</li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-header dashboard-card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-thumbs-down me-2"></i>Concerns</h5>
+              </div>
+              <div class="card-body p-0">
+                <ul class="list-group list-group-flush" id="concerns">
+                  {% if session.get('sentiment_analysis') and session.get('sentiment_analysis').concerns %}
+                    {% for item in session.get('sentiment_analysis').concerns %}
+                      <li class="list-group-item">
+                        <i class="fas fa-exclamation-circle text-danger me-2"></i>{{ item }}
+                      </li>
+                    {% endfor %}
+                  {% else %}
+                    <li class="list-group-item text-muted">No concerns identified</li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card mb-4">
+          <div class="card-header dashboard-card-header">
+            <h5 class="card-title mb-0"><i class="fas fa-lightbulb me-2"></i>Recommended Actions</h5>
+          </div>
+          <div class="card-body p-0">
+            <ul class="list-group list-group-flush" id="recommendations">
+              {% if session.get('sentiment_analysis') and session.get('sentiment_analysis').engagement_recommendations %}
+                {% for item in session.get('sentiment_analysis').engagement_recommendations %}
+                  <li class="list-group-item">
+                    <i class="fas fa-lightbulb text-warning me-2"></i>{{ item }}
+                  </li>
+                {% endfor %}
+              {% else %}
+                <li class="list-group-item text-muted">No recommendations available</li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header dashboard-card-header">
+            <h5 class="card-title mb-0"><i class="fas fa-file-alt me-2"></i>Analysis Summary</h5>
+          </div>
+          <div class="card-body">
+            <p id="analysis-summary" class="mb-0">
+              {% if session.get('sentiment_analysis') %}
+                {{ session.get('sentiment_analysis').summary }}
+              {% else %}
+                No summary available
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Instructions and Sample -->
+      <div id="instructions-section" class="{% if session.get('sentiment_analysis') %}d-none{% endif %}">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3 class="card-title"><i class="fas fa-info-circle me-2"></i>How It Works</h3>
+            <div class="row">
+              <div class="col-md-7">
+                <ol class="mt-3">
+                  <li class="mb-2">Enter employee feedback text from surveys, exit interviews, or other sources</li>
+                  <li class="mb-2">Our AI analyzes the text for sentiment and key themes</li>
+                  <li class="mb-2">The system identifies positive aspects and areas of concern</li>
+                  <li class="mb-2">Attrition risk is calculated based on sentiment patterns</li>
+                  <li class="mb-2">Get actionable recommendations to improve employee engagement</li>
+                </ol>
+                <div class="alert alert-info mt-3">
+                  <i class="fas fa-lightbulb me-2"></i> <strong>Tip:</strong> For more accurate results, include detailed feedback with specific examples rather than short, vague comments.
+                </div>
+              </div>
+              <div class="col-md-5">
+                <img src="https://blogger.googleusercontent.com/img/a/AVvXsEgx2U7O6OxcfhC0tGJl4s-MUvTMvJFtJI_8bibzJ2LUsSjyRtbVWEZ7KG5DAqWEIkTZGt95fU28tFxKsPs_vZN1gdMY-sWmHJGEPr5s0DmLTqAo03MFlv-RHozmBUVbJ-E_BLVPDuVRsYyURH2ykjCVOWDGL_CWxkBdHrFKOmPtT0QdreiU5Melbbg9TfI=w381-h343" alt="Employee Engagement" class="img-fluid rounded">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title"><i class="fas fa-cogs me-2"></i>AI-Powered Features</h3>
+            <div class="row mt-3 g-3">
+              <div class="col-md-6">
+                <div class="d-flex">
+                  <div class="me-3">
+                    <span class="bg-primary p-2 rounded-circle text-white">
+                      <i class="fas fa-robot"></i>
+                    </span>
+                  </div>
+                  <div>
+                    <h5>Sentiment Detection</h5>
+                    <p class="text-muted">Analyzes the emotional tone and attitude expressed in feedback</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex">
+                  <div class="me-3">
+                    <span class="bg-success p-2 rounded-circle text-white">
+                      <i class="fas fa-search"></i>
+                    </span>
+                  </div>
+                  <div>
+                    <h5>Theme Extraction</h5>
+                    <p class="text-muted">Identifies recurring topics and subjects in employee feedback</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex">
+                  <div class="me-3">
+                    <span class="bg-warning p-2 rounded-circle text-white">
+                      <i class="fas fa-user-slash"></i>
+                    </span>
+                  </div>
+                  <div>
+                    <h5>Attrition Prediction</h5>
+                    <p class="text-muted">Assesses likelihood of employee departure based on feedback</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex">
+                  <div class="me-3">
+                    <span class="bg-info p-2 rounded-circle text-white">
+                      <i class="fas fa-lightbulb"></i>
+                    </span>
+                  </div>
+                  <div>
+                    <h5>Smart Recommendations</h5>
+                    <p class="text-muted">Suggests tailored actions to improve engagement</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,349 @@
+{% extends 'base.html' %}
+
+{% block title %}HR-Tech Innovation Suite | Resume Screening{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/resume_screening.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="display-5 fw-bold mb-3">AI-Powered Resume Screening</h1>
+      <p class="lead">Upload resumes and match them against your Software Engineer job requirements to identify the best candidates.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Input Form -->
+    <div class="col-lg-5 mb-4">
+      <div class="card dashboard-card">
+        <div class="card-header dashboard-card-header">
+          <h4 class="card-title mb-0"><i class="fas fa-upload me-2"></i>Upload & Analyze</h4>
+        </div>
+        <div class="card-body">
+          <form id="resume-form" action="/analyze-resume" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="resume-file" class="form-label">Upload Resume (PDF or DOCX)</label>
+              <input type="file" class="form-control" id="resume-file" name="resume" accept=".pdf,.docx" required>
+              <div class="mt-2 d-none">
+                <span class="badge bg-primary"><i class="fas fa-file me-1"></i><span id="file-name"></span></span>
+              </div>
+              <div class="form-text">Maximum file size: 16MB</div>
+            </div>
+            
+            <div class="mb-4">
+              <label for="job-description" class="form-label">Job Description</label>
+              <textarea class="form-control" id="job-description" name="job_description" rows="6" placeholder="Paste the Software Engineer job description here..." required></textarea>
+            </div>
+            
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search me-2"></i>Analyze Resume
+              </button>
+              <button type="button" id="reset-form" class="btn btn-outline-secondary">
+                <i class="fas fa-undo me-2"></i>Reset
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Example Job Description Card -->
+      <div class="card dashboard-card mt-4">
+        <div class="card-header dashboard-card-header">
+          <h5 class="card-title mb-0"><i class="fas fa-lightbulb me-2"></i>Example Job Description</h5>
+        </div>
+        <div class="card-body">
+          <p class="small mb-2">You can use this sample job description to test the system:</p>
+          <div class="bg-light p-3 rounded small" style="max-height: 200px; overflow-y: auto;">
+            <p><strong>Software Engineer</strong></p>
+            <p>We are seeking a skilled Software Engineer to join our development team. The ideal candidate will have experience with full-stack development and a strong foundation in computer science principles.</p>
+            <p><strong>Requirements:</strong></p>
+            <ul>
+              <li>Bachelor's degree in Computer Science or related field</li>
+              <li>3+ years of experience in software development</li>
+              <li>Proficiency in Python, JavaScript, and React</li>
+              <li>Experience with database design and SQL</li>
+              <li>Familiarity with Agile development methodologies</li>
+              <li>Strong problem-solving skills and attention to detail</li>
+              <li>Excellent communication and teamwork abilities</li>
+            </ul>
+            <p><strong>Preferred Skills:</strong></p>
+            <ul>
+              <li>Experience with cloud platforms (AWS, Azure, or GCP)</li>
+              <li>Knowledge of microservices architecture</li>
+              <li>Familiarity with CI/CD pipelines</li>
+              <li>Experience with Docker and Kubernetes</li>
+            </ul>
+          </div>
+          <button class="btn btn-sm btn-outline-primary mt-2" onclick="document.getElementById('job-description').value = document.querySelector('.bg-light').innerText; document.getElementById('job-description').focus();">
+            <i class="fas fa-copy me-1"></i>Copy to Form
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Results Display -->
+    <div class="col-lg-7">
+      <div id="result-section" class="result-section {% if not session.get('resume_analysis') %}d-none{% endif %}">
+        <h3 class="mb-4"><i class="fas fa-chart-bar me-2"></i>Resume Analysis Results</h3>
+        
+        <div class="row mb-4">
+          <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card h-100 text-center">
+              <div class="card-body">
+                <h5 class="card-title">Match Score</h5>
+                <div class="match-score-container">
+                  <canvas id="match-score-gauge" width="120" height="120"></canvas>
+                  <div class="match-score" id="match-score">
+                    {% if session.get('resume_analysis') %}
+                      {{ session.get('resume_analysis').match_score }}
+                    {% else %}
+                      0
+                    {% endif %}
+                  </div>
+                </div>
+                <p class="small text-muted mt-2">Overall match with job requirements</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-8">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Skills Summary</h5>
+                <div class="row g-3">
+                  <div class="col-6">
+                    <div class="d-flex align-items-center">
+                      <i class="fas fa-check-circle text-success me-2"></i>
+                      <span>Matching Skills:</span>
+                    </div>
+                    <div class="mt-2" id="matching-skills">
+                      {% if session.get('resume_analysis') and session.get('resume_analysis').matching_skills %}
+                        {% for skill in session.get('resume_analysis').matching_skills %}
+                          <span class="badge bg-success skill-badge">{{ skill }}</span>
+                        {% endfor %}
+                      {% else %}
+                        <p class="text-muted">No matching skills found</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="d-flex align-items-center">
+                      <i class="fas fa-times-circle text-danger me-2"></i>
+                      <span>Missing Skills:</span>
+                    </div>
+                    <div class="mt-2" id="missing-skills">
+                      {% if session.get('resume_analysis') and session.get('resume_analysis').missing_skills %}
+                        {% for skill in session.get('resume_analysis').missing_skills %}
+                          <span class="badge bg-danger skill-badge">{{ skill }}</span>
+                        {% endfor %}
+                      {% else %}
+                        <p class="text-muted">No missing skills identified</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card mb-4">
+          <div class="card-header dashboard-card-header">
+            <h5 class="card-title mb-0"><i class="fas fa-list-ul me-2"></i>Extracted Skills</h5>
+          </div>
+          <div class="card-body">
+            <div id="extracted-skills">
+              {% if session.get('resume_analysis') and session.get('resume_analysis').extracted_skills %}
+                {% for skill in session.get('resume_analysis').extracted_skills %}
+                  <span class="badge bg-secondary skill-badge">{{ skill }}</span>
+                {% endfor %}
+              {% else %}
+                <p class="text-muted">No skills extracted</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <div class="card h-100">
+              <div class="card-header dashboard-card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-briefcase me-2"></i>Experience</h5>
+              </div>
+              <div class="card-body">
+                <p id="experience-summary" class="mb-0">
+                  {% if session.get('resume_analysis') %}
+                    {{ session.get('resume_analysis').experience_summary }}
+                  {% else %}
+                    No experience information available
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-header dashboard-card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-graduation-cap me-2"></i>Education</h5>
+              </div>
+              <div class="card-body">
+                <p id="education-summary" class="mb-0">
+                  {% if session.get('resume_analysis') %}
+                    {{ session.get('resume_analysis').education_summary }}
+                  {% else %}
+                    No education information available
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <div class="card h-100">
+              <div class="card-header dashboard-card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-star me-2"></i>Strengths</h5>
+              </div>
+              <div class="card-body p-0">
+                <ul class="list-group list-group-flush" id="strengths-list">
+                  {% if session.get('resume_analysis') and session.get('resume_analysis').strengths %}
+                    {% for strength in session.get('resume_analysis').strengths %}
+                      <li class="list-group-item">{{ strength }}</li>
+                    {% endfor %}
+                  {% else %}
+                    <li class="list-group-item text-muted">No specific strengths identified</li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-header dashboard-card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Areas for Improvement</h5>
+              </div>
+              <div class="card-body p-0">
+                <ul class="list-group list-group-flush" id="weaknesses-list">
+                  {% if session.get('resume_analysis') and session.get('resume_analysis').weaknesses %}
+                    {% for weakness in session.get('resume_analysis').weaknesses %}
+                      <li class="list-group-item">{{ weakness }}</li>
+                    {% endfor %}
+                  {% else %}
+                    <li class="list-group-item text-muted">No specific weaknesses identified</li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header dashboard-card-header">
+            <h5 class="card-title mb-0"><i class="fas fa-clipboard-check me-2"></i>Overall Assessment</h5>
+          </div>
+          <div class="card-body">
+            <p id="overall-assessment" class="mb-0">
+              {% if session.get('resume_analysis') %}
+                {{ session.get('resume_analysis').overall_assessment }}
+              {% else %}
+                No overall assessment available
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Instructions and Sample -->
+      <div id="instructions-section" class="{% if session.get('resume_analysis') %}d-none{% endif %}">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3 class="card-title"><i class="fas fa-info-circle me-2"></i>How It Works</h3>
+            <div class="row">
+              <div class="col-md-7">
+                <ol class="mt-3">
+                  <li class="mb-2">Upload a resume in PDF or DOCX format</li>
+                  <li class="mb-2">Enter or paste a Software Engineer job description</li>
+                  <li class="mb-2">Our AI analyzes the resume against the job requirements</li>
+                  <li class="mb-2">Review the detailed match analysis and candidate assessment</li>
+                  <li class="mb-2">Make informed decisions based on skill matching and qualifications</li>
+                </ol>
+                <div class="alert alert-info mt-3">
+                  <i class="fas fa-lightbulb me-2"></i> <strong>Tip:</strong> For best results, use detailed job descriptions that clearly outline required skills and qualifications.
+                </div>
+              </div>
+              <div class="col-md-5">
+                <img src="https://blogger.googleusercontent.com/img/a/AVvXsEgx2U7O6OxcfhC0tGJl4s-MUvTMvJFtJI_8bibzJ2LUsSjyRtbVWEZ7KG5DAqWEIkTZGt95fU28tFxKsPs_vZN1gdMY-sWmHJGEPr5s0DmLTqAo03MFlv-RHozmBUVbJ-E_BLVPDuVRsYyURH2ykjCVOWDGL_CWxkBdHrFKOmPtT0QdreiU5Melbbg9TfI=w381-h343" alt="Resume Document" class="img-fluid rounded">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title"><i class="fas fa-cogs me-2"></i>AI-Powered Features</h3>
+            <div class="row mt-3 g-3">
+              <div class="col-md-6">
+                <div class="d-flex">
+                  <div class="me-3">
+                    <span class="bg-primary p-2 rounded-circle text-white">
+                      <i class="fas fa-robot"></i>
+                    </span>
+                  </div>
+                  <div>
+                    <h5>Intelligent Skill Extraction</h5>
+                    <p class="text-muted">Automatically identifies technical and soft skills from resume text</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex">
+                  <div class="me-3">
+                    <span class="bg-success p-2 rounded-circle text-white">
+                      <i class="fas fa-check-double"></i>
+                    </span>
+                  </div>
+                  <div>
+                    <h5>Skill Matching</h5>
+                    <p class="text-muted">Compares skills and experience against job requirements</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex">
+                  <div class="me-3">
+                    <span class="bg-warning p-2 rounded-circle text-white">
+                      <i class="fas fa-chart-bar"></i>
+                    </span>
+                  </div>
+                  <div>
+                    <h5>Match Scoring</h5>
+                    <p class="text-muted">Generates a numerical score indicating overall job fit</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex">
+                  <div class="me-3">
+                    <span class="bg-info p-2 rounded-circle text-white">
+                      <i class="fas fa-comment-dots"></i>
+                    </span>
+                  </div>
+                  <div>
+                    <h5>Detailed Assessment</h5>
+                    <p class="text-muted">Provides strengths, weaknesses, and overall evaluation</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

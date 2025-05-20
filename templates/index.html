@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+
+{% block title %}TatvIQ | Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-overlay"></div>
+  <div class="container hero-content text-center">
+    <h1 class="display-4 fw-bold mb-4">AI-Powered HR Solutions</h1>
+    <p class="lead mb-5">Revolutionize your HR processes with cutting-edge AI technology for intelligent resume screening and employee engagement analysis.</p>
+    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+      <a href="{{ url_for('resume_screening') }}" class="btn btn-primary btn-lg px-4 gap-3">
+        <i class="fas fa-file-alt me-2"></i>Resume Screening
+      </a>
+      <a href="{{ url_for('sentiment_analysis') }}" class="btn btn-outline-light btn-lg px-4">
+        <i class="fas fa-chart-line me-2"></i>Sentiment Analysis
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Main Features Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Resume Screening Feature -->
+      <div class="col-lg-6">
+        <div class="card h-100 feature-card">
+          <div class="card-body p-4">
+            <div class="text-center">
+              <div class="feature-icon">
+                <i class="fas fa-file-alt"></i>
+              </div>
+              <h3 class="card-title mb-3">Resume Screening</h3>
+            </div>
+            <p class="card-text">Automatically screen and rank resumes for Software Engineer positions based on job requirements. Our AI-powered system extracts key skills and qualifications, saving you hours of manual review.</p>
+            <div class="row mt-4">
+              <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  <span>Extract skills & experience</span>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  <span>Match to job descriptions</span>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  <span>Highlight key qualifications</span>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  <span>Score & rank candidates</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mt-3">
+              <img src="https://www.myperfectresume.com/wp-content/uploads/2025/02/ats-resume-checker-hero.png" alt="Resume Document" class="img-fluid rounded" style="max-height: 200px; width: auto;">
+            </div>
+            <div class="text-center mt-4">
+              <a href="{{ url_for('resume_screening') }}" class="btn btn-primary">
+                <i class="fas fa-arrow-right me-2"></i>Screen Resumes
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Sentiment Analysis Feature -->
+      <div class="col-lg-6">
+        <div class="card h-100 feature-card">
+          <div class="card-body p-4">
+            <div class="text-center">
+              <div class="feature-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <h3 class="card-title mb-3">Sentiment Analysis</h3>
+            </div>
+            <p class="card-text">Analyze employee feedback to identify sentiment trends, attrition risks, and engagement opportunities. Our AI helps you understand what your employees are really saying and how to respond effectively.</p>
+            <div class="row mt-4">
+              <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  <span>Analyze feedback sentiment</span>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  <span>Identify key themes</span>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  <span>Predict attrition risks</span>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  <span>Generate recommendations</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mt-3">
+              <img src="https://i0.wp.com/plopdo.com/wp-content/uploads/2019/03/emotional-intelligence.jpg?fit=2560%2C1920&ssl=1" alt="Employee Engagement" class="img-fluid rounded" style="max-height: 200px; width: auto;">
+            </div>
+            <div class="text-center mt-4">
+              <a href="{{ url_for('sentiment_analysis') }}" class="btn btn-primary">
+                <i class="fas fa-arrow-right me-2"></i>Analyze Sentiment
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Why Choose Our HR-Tech Suite?</h2>
+      <p class="lead">Leverage the power of AI to transform your HR processes</p>
+    </div>
+    
+    <div class="row g-4">
+      <!-- Time Saving -->
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="feature-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <h4 class="my-3">Save Time</h4>
+            <p>Reduce resume screening time by up to 75% with AI-powered analysis that works 24/7 without fatigue.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Reduce Bias -->
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="feature-icon">
+              <i class="fas fa-balance-scale"></i>
+            </div>
+            <h4 class="my-3">Reduce Bias</h4>
+            <p>Evaluate candidates based on skills and qualifications, helping to eliminate unconscious bias in hiring.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Data-Driven Decisions -->
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="feature-icon">
+              <i class="fas fa-chart-pie"></i>
+            </div>
+            <h4 class="my-3">Data-Driven Insights</h4>
+            <p>Make informed decisions with sentiment analysis that reveals employee satisfaction trends and attrition risks.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HR Professionals Testimonial Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 mb-4 mb-lg-0">
+        <img src="https://blogger.googleusercontent.com/img/a/AVvXsEgBCLRli_4Hj2ROYjDOSWqo-dzJ_6VHdLOv3nw-b_PefADn8kRFmG8ce0vvolS8EMbwz0ovd0rQ9Kea6K3fEu1FZ83tuXZiKuyJeMU_pThJ6TUhh-9e5YGPFYi2RhEkEaGXAT0KnHYubiaYWiMaUOefQYVRjroEGMwcdoCw4uG-XVDRU4I8cwx8cTe29rI=w369-h369" alt="HR Professionals" class="img-fluid rounded shadow">
+      </div>
+      <div class="col-lg-6">
+        <h2 class="fw-bold mb-4">Trusted by HR Professionals</h2>
+        <div class="bg-light p-4 rounded shadow-sm mb-4">
+          <p class="mb-0 fst-italic">"This HR-Tech Suite has completely transformed our hiring process. We're now able to identify the best candidates faster and more accurately than ever before."</p>
+          <div class="d-flex align-items-center mt-3">
+            <div class="ms-3">
+              <h5 class="mb-0">Sarah Johnson</h5>
+              <p class="text-muted small mb-0">HR Director, Tech Innovations Inc.</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-light p-4 rounded shadow-sm">
+          <p class="mb-0 fst-italic">"The employee sentiment analysis tool has helped us identify and address potential issues before they lead to attrition. It's been invaluable for improving team morale."</p>
+          <div class="d-flex align-items-center mt-3">
+            <div class="ms-3">
+              <h5 class="mb-0">Michael Chen</h5>
+              <p class="text-muted small mb-0">People Operations Manager, Global Solutions</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 bg-primary text-white">
+  <div class="container text-center">
+    <h2 class="fw-bold mb-3">Ready to transform your HR processes?</h2>
+    <p class="lead mb-4">Start using our AI-powered tools today to streamline recruiting and improve employee engagement.</p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{{ url_for('resume_screening') }}" class="btn btn-light btn-lg">
+        <i class="fas fa-file-alt me-2"></i>Try Resume Screening
+      </a>
+      <a href="{{ url_for('sentiment_analysis') }}" class="btn btn-outline-light btn-lg">
+        <i class="fas fa-chart-line me-2"></i>Try Sentiment Analysis
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

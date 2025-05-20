@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+
+{% block title %}TatvIQ | About{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-12 text-center">
+      <h1 class="display-5 fw-bold mb-3">About Our HR-Tech Solution</h1>
+      <p class="lead col-lg-8 mx-auto">Transforming HR processes with AI to improve hiring decisions and employee engagement.</p>
+    </div>
+  </div>
+
+  <!-- Overview Section -->
+  <div class="row mb-5 align-items-center">
+    <div class="col-lg-6 mb-4 mb-lg-0">
+      <h2 class="fw-bold mb-3">Our Mission</h2>
+      <p>The HR-Tech Innovation Suite was developed to address two critical challenges faced by modern HR departments:</p>
+      <ul class="list-group list-group-flush mb-4">
+        <li class="list-group-item bg-transparent">
+          <i class="fas fa-check-circle text-primary me-2"></i>
+          <strong>Efficient Candidate Screening:</strong> Automating the process of matching candidate resumes to job requirements
+        </li>
+        <li class="list-group-item bg-transparent">
+          <i class="fas fa-check-circle text-primary me-2"></i>
+          <strong>Employee Retention:</strong> Analyzing employee feedback to identify sentiment trends and prevent attrition
+        </li>
+      </ul>
+      <p>By leveraging the power of artificial intelligence through Google's Gemini API, we've created tools that help HR professionals make data-driven decisions about hiring and employee engagement.</p>
+    </div>
+    <div class="col-lg-6">
+      <img src="https://thumbs.dreamstime.com/b/unrecognizable-male-blue-chip-hr-manager-using-artificial-intelligence-to-collect-data-male-manual-worker-business-technology-120013853.jpg" alt="HR Professionals" class="img-fluid rounded shadow">
+    </div>
+  </div>
+
+  <!-- Key Features Section -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h2 class="fw-bold mb-4 text-center">Key Features</h2>
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="d-flex">
+                <div class="me-3">
+                  <span class="bg-primary p-3 rounded-circle text-white d-inline-block">
+                    <i class="fas fa-file-alt"></i>
+                  </span>
+                </div>
+                <div>
+                  <h4>Resume Screening</h4>
+                  <ul class="list-unstyled">
+                    <li><i class="fas fa-angle-right me-2 text-primary"></i>PDF & DOCX resume parsing</li>
+                    <li><i class="fas fa-angle-right me-2 text-primary"></i>Skill extraction and matching</li>
+                    <li><i class="fas fa-angle-right me-2 text-primary"></i>Match scoring against job requirements</li>
+                    <li><i class="fas fa-angle-right me-2 text-primary"></i>Candidate strengths and weaknesses analysis</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex">
+                <div class="me-3">
+                  <span class="bg-success p-3 rounded-circle text-white d-inline-block">
+                    <i class="fas fa-chart-line"></i>
+                  </span>
+                </div>
+                <div>
+                  <h4>Sentiment Analysis</h4>
+                  <ul class="list-unstyled">
+                    <li><i class="fas fa-angle-right me-2 text-success"></i>Employee feedback analysis</li>
+                    <li><i class="fas fa-angle-right me-2 text-success"></i>Sentiment scoring and theme extraction</li>
+                    <li><i class="fas fa-angle-right me-2 text-success"></i>Attrition risk assessment</li>
+                    <li><i class="fas fa-angle-right me-2 text-success"></i>Actionable engagement recommendations</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technology Section -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <h2 class="fw-bold mb-4 text-center">Technology Stack</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <i class="fas fa-brain display-4 text-primary"></i>
+              </div>
+              <h4 class="card-title">AI Technology</h4>
+              <p class="card-text">Powered by Google's Gemini API, our system leverages advanced language models for natural language understanding and processing.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <i class="fas fa-server display-4 text-primary"></i>
+              </div>
+              <h4 class="card-title">Backend</h4>
+              <p class="card-text">Built with Flask, our backend handles document processing, API communication, and data analysis securely and efficiently.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <i class="fas fa-laptop-code display-4 text-primary"></i>
+              </div>
+              <h4 class="card-title">Frontend</h4>
+              <p class="card-text">A responsive, intuitive interface built with Bootstrap and modern JavaScript provides a seamless user experience.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workflow Section -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <h2 class="fw-bold mb-4 text-center">How It Works</h2>
+      <div class="row g-4">
+        <!-- Resume Screening Workflow -->
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-primary text-white py-3">
+              <h4 class="card-title mb-0 text-center"><i class="fas fa-file-alt me-2"></i>Resume Screening Workflow</h4>
+            </div>
+            <div class="card-body p-4">
+              <div class="d-flex mb-3">
+                <div class="me-3">
+                  <span class="badge bg-primary rounded-circle p-2">1</span>
+                </div>
+                <div>
+                  <h5>Upload Resume & Job Description</h5>
+                  <p class="text-muted">User uploads a resume file (PDF/DOCX) and enters the job description for a Software Engineer role.</p>
+                </div>
+              </div>
+              <div class="d-flex mb-3">
+                <div class="me-3">
+                  <span class="badge bg-primary rounded-circle p-2">2</span>
+                </div>
+                <div>
+                  <h5>Text Extraction</h5>
+                  <p class="text-muted">System extracts text content from the resume document using specialized parsers.</p>
+                </div>
+              </div>
+              <div class="d-flex mb-3">
+                <div class="me-3">
+                  <span class="badge bg-primary rounded-circle p-2">3</span>
+                </div>
+                <div>
+                  <h5>AI Analysis</h5>
+                  <p class="text-muted">Google Gemini API analyzes the resume text against the job description to identify matching skills and qualifications.</p>
+                </div>
+              </div>
+              <div class="d-flex mb-3">
+                <div class="me-3">
+                  <span class="badge bg-primary rounded-circle p-2">4</span>
+                </div>
+                <div>
+                  <h5>Results Generation</h5>
+                  <p class="text-muted">System compiles match scores, skills analysis, and overall assessment of the candidate's fit for the role.</p>
+                </div>
+              </div>
+              <div class="d-flex">
+                <div class="me-3">
+                  <span class="badge bg-primary rounded-circle p-2">5</span>
+                </div>
+                <div>
+                  <h5>Visual Presentation</h5>
+                  <p class="text-muted">Results are presented in an intuitive interface with visualizations and actionable insights.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Sentiment Analysis Workflow -->
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-success text-white py-3">
+              <h4 class="card-title mb-0 text-center"><i class="fas fa-chart-line me-2"></i>Sentiment Analysis Workflow</h4>
+            </div>
+            <div class="card-body p-4">
+              <div class="d-flex mb-3">
+                <div class="me-3">
+                  <span class="badge bg-success rounded-circle p-2">1</span>
+                </div>
+                <div>
+                  <h5>Input Employee Feedback</h5>
+                  <p class="text-muted">User enters employee feedback text from surveys, reviews, or exit interviews.</p>
+                </div>
+              </div>
+              <div class="d-flex mb-3">
+                <div class="me-3">
+                  <span class="badge bg-success rounded-circle p-2">2</span>
+                </div>
+                <div>
+                  <h5>Sentiment Processing</h5>
+                  <p class="text-muted">System sends the feedback text to the Google Gemini API for processing.</p>
+                </div>
+              </div>
+              <div class="d-flex mb-3">
+                <div class="me-3">
+                  <span class="badge bg-success rounded-circle p-2">3</span>
+                </div>
+                <div>
+                  <h5>AI Analysis</h5>
+                  <p class="text-muted">Gemini API analyzes sentiment, identifies key themes, and assesses attrition risk factors.</p>
+                </div>
+              </div>
+              <div class="d-flex mb-3">
+                <div class="me-3">
+                  <span class="badge bg-success rounded-circle p-2">4</span>
+                </div>
+                <div>
+                  <h5>Recommendation Generation</h5>
+                  <p class="text-muted">System generates tailored recommendations to address concerns and improve engagement.</p>
+                </div>
+              </div>
+              <div class="d-flex">
+                <div class="me-3">
+                  <span class="badge bg-success rounded-circle p-2">5</span>
+                </div>
+                <div>
+                  <h5>Visual Presentation</h5>
+                  <p class="text-muted">Results are presented with charts, sentiment indicators, and actionable insights.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Benefits Section -->
+  <div class="row mb-5">
+    <div class="col-lg-6 mb-4 mb-lg-0">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <h2 class="fw-bold mb-4">Benefits for HR Professionals</h2>
+          <div class="d-flex align-items-start mb-3">
+            <i class="fas fa-clock text-primary me-3 mt-1" style="font-size: 1.5rem;"></i>
+            <div>
+              <h5>Time Efficiency</h5>
+              <p>Reduce the time spent on resume screening by up to 75%, allowing HR professionals to focus on high-value tasks.</p>
+            </div>
+          </div>
+          <div class="d-flex align-items-start mb-3">
+            <i class="fas fa-bullseye text-primary me-3 mt-1" style="font-size: 1.5rem;"></i>
+            <div>
+              <h5>Improved Accuracy</h5>
+              <p>AI-powered analysis provides more consistent and objective evaluation of resumes than manual screening.</p>
+            </div>
+          </div>
+          <div class="d-flex align-items-start mb-3">
+            <i class="fas fa-chart-bar text-primary me-3 mt-1" style="font-size: 1.5rem;"></i>
+            <div>
+              <h5>Data-Driven Insights</h5>
+              <p>Make better hiring and retention decisions based on quantifiable data rather than gut feelings.</p>
+            </div>
+          </div>
+          <div class="d-flex align-items-start">
+            <i class="fas fa-users text-primary me-3 mt-1" style="font-size: 1.5rem;"></i>
+            <div>
+              <h5>Enhanced Employee Experience</h5>
+              <p>Proactively address engagement issues before they lead to turnover, improving overall workplace satisfaction.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <img src="https://pixabay.com/get/ga98b4bf2b8dfbe1ef447b034ff18de88e4fe9b3b136216e1cdddff189f9e63549231c59bdb3b0bfea2beb1305d3e8ead13a554666d5fa3ecf87c72038573b4d5_1280.jpg" alt="Office Workplace" class="img-fluid rounded shadow mb-4">
+      <div class="alert alert-primary">
+        <div class="d-flex">
+          <div class="me-3">
+            <i class="fas fa-info-circle fa-2x"></i>
+          </div>
+          <div>
+            <h5>Looking for More?</h5>
+            <p class="mb-0">Our HR-Tech Innovation Suite is continuously evolving. We're working on additional features like collaborative hiring workflows, interview scheduling, and longitudinal engagement tracking.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Call to Action -->
+  <div class="row">
+    <div class="col-12 text-center">
+      <div class="card bg-primary text-white border-0 shadow">
+        <div class="card-body p-5">
+          <h2 class="fw-bold mb-3">Start using AI for your HR needs today</h2>
+          <p class="lead mb-4">Experience the power of AI-driven resume screening and sentiment analysis</p>
+          <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('resume_screening') }}" class="btn btn-light btn-lg">
+              <i class="fas fa-file-alt me-2"></i>Try Resume Screening
+            </a>
+            <a href="{{ url_for('sentiment_analysis') }}" class="btn btn-outline-light btn-lg">
+              <i class="fas fa-chart-line me-2"></i>Try Sentiment Analysis
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
